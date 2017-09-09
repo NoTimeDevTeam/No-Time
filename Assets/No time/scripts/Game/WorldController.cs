@@ -106,13 +106,18 @@ public class WorldController : MonoBehaviour
 
 	#endregion
 
+    /// <summary>
+    /// this is used for safing FRAMES
+    /// </summary>
 	float timer = 0;
-	//Assets\stuff\Assets\anzug_glatze_sprite.png
+    //Assets\stuff\Assets\anzug_glatze_sprite.png
 
-	#region monobehaviour Stuff
-
-	// Use this for initialization
-	void Start ()
+    #region monobehaviour Stuff
+    
+    /// <summary>
+    /// setting up the instructionManager, the user, spawns all entities and set the camera to follow player
+    /// </summary>
+    void Start ()
 	{
 		currTime = 0;
 		#region IntstructionManager
@@ -124,7 +129,9 @@ public class WorldController : MonoBehaviour
 		//IManager.SaveInstructions (idat);
 		IManager.LoadInstructions ();
 		#endregion
-		#region user
+		
+        
+        #region user
 
 		List<InputMovement> input = new List<InputMovement> ();
 		input.Add (new InputMovement (KeyCode.W, new Vector2 (0f, 1f), PressTypes.KeyDownKey));
@@ -157,13 +164,21 @@ public class WorldController : MonoBehaviour
 		Camera.main.gameObject.GetComponent<Camera_Behaivour> ().target = entities [0].entity.transform;
 	}
 
-	// Update is called once per frame
-	void Update ()
+    /// <summary>
+    /// Called once per frame
+    /// checks for "quit" command
+    /// checks for button presses
+    /// executes all updates on entities
+    /// keeps the clock ticking
+    /// Exports Frame if needed
+    /// </summary>
+    void Update ()
 	{
 		if (Input.GetKeyDown (KeyCode.Escape)) {
 			Application.Quit ();
 		}
-
+        
+        // maybe obsolete
 		Buttons ();
 		//running all updates
 		if (TimeRunning && UpdateTick != null) {
@@ -180,9 +195,11 @@ public class WorldController : MonoBehaviour
 			}
 		}
 		//Debug.Log ("Log");
-
 	}
 
+    /// <summary>
+    /// currently no use
+    /// </summary>
 	void FixedUpdate ()
 	{
 		
@@ -192,6 +209,10 @@ public class WorldController : MonoBehaviour
 
 	#region Methodes
 
+    /// <summary>
+    /// Mainly checks for space for pausetoggle
+    /// obsolete feature: load frame on [return]
+    /// </summary>
 	void Buttons ()
 	{
 		if (MenuPause) {
@@ -212,6 +233,9 @@ public class WorldController : MonoBehaviour
 
 	}
 
+    /// <summary>
+    /// toggles the Time-Pausescreen overlay
+    /// </summary>
 	void TogglePause ()
 	{
 		Slider slider = BreakScreen.transform.GetComponentInChildren<Slider> ();
@@ -232,6 +256,9 @@ public class WorldController : MonoBehaviour
 		Debug.Log ("TogglePause");
 	}
 
+    /// <summary>
+    /// Currently only updates the time near slider in Time-Pausescreen
+    /// </summary>
 	public void UpdateUI ()
 	{
 		Text step = BreakScreen.transform.GetComponentInChildren<Text> ();
