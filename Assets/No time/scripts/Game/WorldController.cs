@@ -7,16 +7,35 @@ using System;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
+/// <summary>
+/// This is the class that administrates everything inside the game.
+/// This Class contains:
+/// - Init and storage of all objects inside the world - at any time
+/// - calls updates for every entity (keep in mind, we only have 1 MonoBehaviour in the entire gamelogic)
+/// - provides Methodes for saving and loading "Frames"
+/// - Manages Time
+/// - generic create entity methodes
+/// - search for gameobject
+/// </summary>
 public class WorldController : MonoBehaviour
 {
 	
 	#region Data Storage
 
+    /// <summary>
+    /// current time in seconds
+    /// </summary>
 	public float currTime = 0;
 
+    /// <summary>
+    /// all entities saved with their Id's
+    /// </summary>
 	Dictionary<int,Entity> entities = new Dictionary<int, Entity> ();
-	int _frameid = 0;
 
+    int _frameid = 0;
+    /// <summary>
+    /// Id of current last frame
+    /// </summary>
 	int frameid { 
 		get { return _frameid; } 
 		set {
@@ -25,12 +44,20 @@ public class WorldController : MonoBehaviour
 	}
 	//double time= 0;
 	//the word 'Break' refers to pause
+    /// <summary>
+    /// screen that is shown if you pause time
+    /// </summary>
 	public GameObject BreakScreen;
 
+    /// <summary>
+    /// Border around near object
+    /// </summary>
 	public GameObject Highlight;
 
-	public Delegate stuff;
-
+    /// <summary>
+    /// Sprites of all characters. 
+    /// This is temporary and will later be replaced
+    /// </summary>
 	public Sprite[] CharacterSprites;
 
 	/// <summary>
@@ -38,19 +65,33 @@ public class WorldController : MonoBehaviour
 	/// </summary>
 	public event NoNoDel UpdateTick;
 
+    /// <summary>
+    /// provides methodes for Frameformatting
+    /// </summary>
 	FrameManager FManager = new FrameManager ("History.dat");
 
+    /// <summary>
+    /// manages all the Instructions for the Entities
+    /// </summary>
 	InstructionManager IManager;
 
-	public float TimeToSave;
+    /// <summary>
+    /// Time between saving frames
+    /// </summary>
+    public float TimeToSave;
 
 	#endregion
 
 	#region State Properties
-
+    /// <summary>
+    /// If time is running
+    /// </summary>
 	bool TimeRunning = true;
 	bool _MenuPause;
 
+    /// <summary>
+    /// The menu is shown
+    /// </summary>
 	bool MenuPause {
 		get{ return _MenuPause; }
 		set {
@@ -72,7 +113,7 @@ public class WorldController : MonoBehaviour
 
 	// Use this for initialization
 	void Start ()
-	{           
+	{
 		currTime = 0;
 		#region IntstructionManager
 		IManager = new InstructionManager ();
@@ -109,49 +150,7 @@ public class WorldController : MonoBehaviour
 		#endregion 
 
 		new Spawner (this);
-
-		/*
-		#region polize
-
-
-		GameObject c = new GameObject ("Polizist",typeof(SpriteRenderer),typeof(CircleCollider2D),typeof(Rigidbody2D));
-
-		c.transform.position = new Vector2(-4f,-5f);
-		c.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-		c.GetComponent<Rigidbody2D>().mass = 2;
-		c.GetComponent<Rigidbody2D>().drag = 1000;
-		c.GetComponent<Rigidbody2D>().angularDrag = 10;
-		c.GetComponent<Rigidbody2D>().gravityScale = 0;
-
-		c.GetComponent<CircleCollider2D>().radius = 1.5f;
-		c.GetComponent<SpriteRenderer> ().sprite = PolizistSprite;
-
-
-		AddNewCharacter(c);
-
-		//Instantiate(player);
-		Debug.Log ("Character created");
-		#endregion
-		#region general
-
-		GameObject g = new GameObject ("General", typeof(SpriteRenderer),typeof(CircleCollider2D),typeof(Rigidbody2D));
-		g.transform.position = new Vector2(8,8);
-		g.GetComponent<SpriteRenderer> ().sprite = GeneralSprite;
-
-		g.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-		g.GetComponent<Rigidbody2D>().mass = 2;
-		g.GetComponent<Rigidbody2D>().drag = 1000;
-		g.GetComponent<Rigidbody2D>().angularDrag = 10;
-		g.GetComponent<Rigidbody2D>().gravityScale = 0;
-
-		g.GetComponent<CircleCollider2D>().radius = 1.5f;
-
-		AddNewCharacter(g);
-
-		//Instantiate(player);
-		Debug.Log ("Character created");
-		#endregion
-*/
+        		
 		//kann benutzt werden um slowmos zu machen und so
 		//einfach Zeitlauf verlangsamen
 		//Debug.Log (Time.timeScale);
@@ -245,7 +244,7 @@ public class WorldController : MonoBehaviour
 	/// <summary>
 	/// Loads the frame f.
 	/// This pastes the information of the Frame
-	/// into the coresponding Entity
+	/// into the coresponding Entities
 	/// </summary>
 	/// <param name="f">Frame that should be loaded</param>
 	//ToDo make it more efficient
